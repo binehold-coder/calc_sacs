@@ -35,7 +35,7 @@ pip install -r requirements.txt
 nano .env
 
 # В nano вставь:
-# TELEGRAM_BOT_TOKEN=8528151536:AAEtxsmj1SnpjZ5m_RF9H5I7pQkDI__Dt14
+# TELEGRAM_BOT_TOKEN=ваш_токен_от_BotFather
 # Сохрани: Ctrl+O, Enter, Ctrl+X
 
 # ШАГ 11: Тестовый запуск (Ctrl+C для остановки)
