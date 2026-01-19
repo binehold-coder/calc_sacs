@@ -30,8 +30,10 @@ logger = logging.getLogger(__name__)
 LINES, BAGS = range(2)
 
 # Constants
-MIN_VALUE = 1
-MAX_VALUE = 17
+MIN_LINES = 1
+MAX_LINES = 17
+MIN_BAGS = 1
+MAX_BAGS = 10
 
 
 class SacsCalculator:
@@ -47,7 +49,7 @@ class SacsCalculator:
         - Even lines (2,4,6...): 9 bags
         - Then add remaining bags
         """
-        if lines < 1 or lines > 17 or bags < 1 or bags > 17:
+        if lines < MIN_LINES or lines > MAX_LINES or bags < MIN_BAGS or bags > MAX_BAGS:
             return None
         
         # Number of full odd and even lines
@@ -61,11 +63,20 @@ class SacsCalculator:
         return total_bags
     
     @staticmethod
-    def is_valid_input(value: str) -> bool:
-        """Validates if input value is valid"""
+    def is_valid_lines(value: str) -> bool:
+        """Validates if lines input is valid (1-17)"""
         try:
             num = int(value)
-            return MIN_VALUE <= num <= MAX_VALUE
+            return MIN_LINES <= num <= MAX_LINES
+        except ValueError:
+            return False
+    
+    @staticmethod
+    def is_valid_bags(value: str) -> bool:
+        """Validates if bags input is valid (1-10)"""
+        try:
+            num = int(value)
+            return MIN_BAGS <= num <= MAX_BAGS
         except ValueError:
             return False
 
@@ -90,7 +101,7 @@ async def get_lines(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Get number of lines"""
     user_input = update.message.text.strip()
     
-    if not SacsCalculator.is_valid_input(user_input):
+    if not SacsCalculator.is_valid_lines(user_input):
         error_text = (
             "❌ Erreur ! Veuillez entrer un nombre entre 1 et 17.\n"
             "Essayez encore :"
@@ -101,7 +112,7 @@ async def get_lines(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     # Save number of lines
     context.user_data['lines'] = int(user_input)
     
-    text = f"✅ Lignes : {user_input}\n\nMaintenant, entrez le nombre de sacs supplémentaires :"
+    text = f"✅ Lignes : {user_input}\n\nMaintenant, entrez le nombre de sacs supplémentaires (1-10) :"
     await update.message.reply_text(text)
     return BAGS
 
@@ -110,9 +121,9 @@ async def get_bags(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Get number of bags and calculate result"""
     user_input = update.message.text.strip()
     
-    if not SacsCalculator.is_valid_input(user_input):
+    if not SacsCalculator.is_valid_bags(user_input):
         error_text = (
-            "❌ Erreur ! Veuillez entrer un nombre entre 1 et 17.\n"
+            "❌ Erreur ! Veuillez entrer un nombre entre 1 et 10.\n"
             "Essayez encore :"
         )
         await update.message.reply_text(error_text)

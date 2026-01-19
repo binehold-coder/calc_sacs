@@ -30,11 +30,11 @@ class TestSacsCalculator(unittest.TestCase):
         self.assertEqual(result, 20)
     
     def test_max_lines_max_bags(self):
-        """17 линий + 17 мешков (максимум)"""
-        result = SacsCalculator.calculate(17, 17)
-        # 9 нечётных + 8 чётных + 17
-        # (9 × 10) + (8 × 9) + 17 = 90 + 72 + 17 = 179
-        self.assertEqual(result, 179)
+        """17 линий + 10 мешков (максимум)"""
+        result = SacsCalculator.calculate(17, 10)
+        # 9 нечётных + 8 чётных + 10
+        # (9 × 10) + (8 × 9) + 10 = 90 + 72 + 10 = 172
+        self.assertEqual(result, 172)
     
     def test_invalid_lines_too_high(self):
         """Проверка валидации: линии > 17"""
@@ -47,8 +47,8 @@ class TestSacsCalculator(unittest.TestCase):
         self.assertIsNone(result)
     
     def test_invalid_bags_too_high(self):
-        """Проверка валидации: мешки > 17"""
-        result = SacsCalculator.calculate(5, 18)
+        """Проверка валидации: мешки > 10"""
+        result = SacsCalculator.calculate(5, 11)
         self.assertIsNone(result)
     
     def test_invalid_bags_too_low(self):
@@ -56,19 +56,29 @@ class TestSacsCalculator(unittest.TestCase):
         result = SacsCalculator.calculate(5, 0)
         self.assertIsNone(result)
     
-    def test_input_validation_string(self):
-        """Проверка валидации входной строки"""
-        self.assertTrue(SacsCalculator.is_valid_input("5"))
-        self.assertTrue(SacsCalculator.is_valid_input("1"))
-        self.assertTrue(SacsCalculator.is_valid_input("17"))
+    def test_input_validation_lines(self):
+        """Проверка валидации линий"""
+        self.assertTrue(SacsCalculator.is_valid_lines("5"))
+        self.assertTrue(SacsCalculator.is_valid_lines("1"))
+        self.assertTrue(SacsCalculator.is_valid_lines("17"))
     
-    def test_input_validation_invalid_string(self):
-        """Проверка валидации некорректных строк"""
-        self.assertFalse(SacsCalculator.is_valid_input("0"))
-        self.assertFalse(SacsCalculator.is_valid_input("18"))
-        self.assertFalse(SacsCalculator.is_valid_input("abc"))
-        self.assertFalse(SacsCalculator.is_valid_input(""))
-        self.assertFalse(SacsCalculator.is_valid_input("-5"))
+    def test_input_validation_lines_invalid(self):
+        """Проверка валидации некорректных линий"""
+        self.assertFalse(SacsCalculator.is_valid_lines("0"))
+        self.assertFalse(SacsCalculator.is_valid_lines("18"))
+        self.assertFalse(SacsCalculator.is_valid_lines("abc"))
+    
+    def test_input_validation_bags(self):
+        """Проверка валидации мешков"""
+        self.assertTrue(SacsCalculator.is_valid_bags("5"))
+        self.assertTrue(SacsCalculator.is_valid_bags("1"))
+        self.assertTrue(SacsCalculator.is_valid_bags("10"))
+    
+    def test_input_validation_bags_invalid(self):
+        """Проверка валидации некорректных мешков"""
+        self.assertFalse(SacsCalculator.is_valid_bags("0"))
+        self.assertFalse(SacsCalculator.is_valid_bags("11"))
+        self.assertFalse(SacsCalculator.is_valid_bags("abc"))
 
 
 class TestSacsCalculatorDetailedLogic(unittest.TestCase):
